@@ -1,123 +1,111 @@
-# Build Your VPC and Launch a Web Server (AWS) 
+# Lab 6 – Scale and Load Balance Your Architecture
 
 ## Author
+
 
 * **Name**: PRADEEP SUNDAR S 
 * **Register Number**: 212224050030
 * **Date of Submission**: 21-08-2026
+---
+
+## Title
+
+Scale and Load Balance Your Architecture
 
 ---
 
 ## Objective
 
-The objective of this experiment is to understand how to design and configure a basic network infrastructure in AWS using a Virtual Private Cloud (VPC). This lab focuses on creating a VPC with a public subnet, configuring an Internet Gateway and route table, launching an EC2 instance, and hosting a simple web server that can be accessed over the internet.
+The objective of this lab is to understand how to design a scalable and highly available architecture on AWS using Auto Scaling and Elastic Load Balancing. This experiment focuses on distributing incoming traffic across multiple EC2 instances, automatically scaling resources based on demand, and validating fault tolerance.
 
 ---
 
 ## Prerequisites
 
-* Basic understanding of cloud computing concepts
-* AWS account or AWS Academy Lab access
-* Web browser with internet connectivity
+* Basic knowledge of Amazon EC2 and VPC
+* Completion of previous labs (IAM, EC2, EBS, Database Server)
+* AWS Academy Lab access
+* Stable internet connection
 
 ---
 
 ## Tools Used
 
 * AWS Management Console
-* Amazon VPC
 * Amazon EC2
-* Internet Gateway
-* Route Table
-* Security Groups
+* Elastic Load Balancer (ELB / ALB)
+* Auto Scaling Groups (ASG)
+* Amazon CloudWatch
 
 ---
 
 ## Tasks Performed
 
-### Task 1: Create a VPC
+### Task 1: Review Existing Architecture
 
-Create a new Virtual Private Cloud (VPC) with a private IP address range. The VPC acts as a logically isolated network in AWS where all other resources will be deployed.
+Students review the existing EC2-based application architecture created in previous experiments.
 
-Students should create a VPC with an appropriate CIDR block (for example, 10.0.0.0/16) and assign a meaningful name.
+### Task 2: Create a Launch Template
 
+Students create a launch template that defines the EC2 instance configuration including AMI, instance type, security group, and user data.
 
-### Task 2: Create a Public Subnet
+### Task 3: Create an Auto Scaling Group
 
-Create a subnet inside the VPC to host public resources. Enable auto-assign public IPv4 so that instances launched in this subnet receive a public IP address.
+Students create an Auto Scaling Group using the launch template and configure minimum, maximum, and desired instance capacity.
 
-The subnet should use a smaller CIDR range (for example, 10.0.1.0/24).
+### Task 4: Configure an Application Load Balancer
 
+Students create an Application Load Balancer and configure target groups for routing traffic to EC2 instances.
 
-### Task 3: Create and Attach Internet Gateway
+### Task 5: Register Auto Scaling Group with Load Balancer
 
-Create an Internet Gateway (IGW) and attach it to the VPC. This allows communication between resources in the VPC and the internet.
+Students attach the Auto Scaling Group to the target group of the load balancer.
 
+### Task 6: Configure Scaling Policies
 
-### Task 4: Configure Route Table
+Students configure scaling policies based on CPU utilization using Amazon CloudWatch alarms.
 
-Create a route table and add a default route (0.0.0.0/0) pointing to the Internet Gateway. Associate this route table with the public subnet.
+### Task 7: Test Load Balancing and Scaling
 
-This step ensures that traffic from the subnet can reach the internet.
+Students test the setup by generating traffic and observing automatic scaling and load distribution.
 
-
-### Task 5: Create Security Group
-
-Create a security group to act as a virtual firewall for the EC2 instance. Configure inbound rules to allow:
-
-SSH on port 22
-
-HTTP on port 80
-
-
-### Task 6: Launch EC2 Instance
-
-Launch an EC2 instance inside the public subnet using Amazon Linux 2 AMI and a suitable instance type (t2.micro).
-
-Attach the previously created security group and key pair.
-
-
-### Task 7: Configure Web Server
-
-Install and start a web server (Apache HTTPD) on the EC2 instance using user data or manual commands.
-
-Create a simple HTML page and verify that it can be accessed from a web browser using the public IP address of the instance.---
+---
 
 ## Workflow (Student Explanation)
 
-1. A Virtual Private Cloud (VPC) was designed and created with the CIDR block 10.0.0.0/16 to establish a secure and isolated network environment within AWS.  
-2. A public subnet was configured within the VPC with the CIDR range 10.0.1.0/24, and auto-assign public IPv4 addresses was enabled to allow internet connectivity for instances.  
-3. An Internet Gateway was created and attached to the VPC, followed by the setup of a route table with a default route (0.0.0.0/0) pointing to the gateway, and the route table was associated with the public subnet.  
-4. A security group was established to permit inbound SSH (port 22) and HTTP (port 80) traffic, and an EC2 instance was launched using the Amazon Linux 2 AMI, associated with the security group and a key pair.  
-5. The Apache HTTPD web server was installed and started on the EC2 instance, a simple HTML webpage was created, and its accessibility was verified through the public IP address of the instance via a web browser.
+1. I reviewed the existing EC2-based application architecture that I had created in previous experiments to understand how the instances were configured and how the application was being accessed.
+
+2. I created a Launch Template by defining the EC2 configuration, including the Amazon Machine Image (AMI), instance type, key pair, security group, and user data script for automatic application setup during instance launch.
+
+3. Using the launch template, I created an Auto Scaling Group. I configured the minimum, maximum, and desired capacity values to control how many EC2 instances should run based on demand. I also selected the appropriate VPC and subnets.
+
+4. Next, I created an Application Load Balancer and configured a target group. I set the protocol and port (HTTP/HTTPS) and defined health check settings to monitor the EC2 instances.
+
+5. I attached the Auto Scaling Group to the target group so that any instances launched by the Auto Scaling Group would automatically register with the Load Balancer.
+
+6. I configured scaling policies based on CPU utilization. I created Amazon CloudWatch alarms to automatically increase the number of instances when CPU usage was high and decrease them when CPU usage was low.
+
+7. Finally, I tested the setup by generating traffic to the Load Balancer DNS name. I observed that the traffic was distributed evenly across instances and that additional instances were launched automatically when the CPU utilization threshold was exceeded.
 
 ---
 
-## Output Screenshots (Attach 3)
+## Output Screenshots 
 
-### Screenshot 1: VPC and Subnet Details
+## Created LoadBalancer
 
-<img width="1920" height="1200" alt="Screenshot (8)" src="https://github.com/user-attachments/assets/e58109bd-d875-4c35-b23c-151a82b70cbb" />
+<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/30bcd1d3-d987-4d74-8107-4e3a64acadc3" />
 
+## Created LabConfig
 
+<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/6da7573d-c81b-4621-91aa-e419be44821b" />
 
----
+## Dynamic Scaling Policy created
 
-### Screenshot 2: EC2 Instance Running
-
-<img width="1920" height="1200" alt="Screenshot (13)" src="https://github.com/user-attachments/assets/c044ced7-eed6-4eda-9daf-e2db57ab4c9f" />
-
-
+<img width="1920" height="967" alt="image" src="https://github.com/user-attachments/assets/d09eafcc-42ca-43e2-8b6d-de4b226b63f7" />
 
 ---
 
-### Screenshot 3: Web Server Output in Browser
 
-<img width="1920" height="1200" alt="Screenshot (14)" src="https://github.com/user-attachments/assets/3d65d3bc-aa50-4a41-b414-5c395ab1eef8" />
+## Result
 
-
----
-
-## Result 
-
-This experiment successfully demonstrated the creation of a custom VPC and deployment of a public-facing web server in AWS. By configuring networking components such as subnets, route tables, and security groups, and by launching an EC2 instance with a web server, the basic architecture of a cloud-hosted application was understood.
+This experiment demonstrated how to build a scalable and fault-tolerant cloud architecture using Auto Scaling Groups and Elastic Load Balancing. The system automatically adjusted resources based on workload and ensured continuous service availability by distributing traffic across multiple instances.
